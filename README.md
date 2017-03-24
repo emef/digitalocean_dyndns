@@ -11,9 +11,11 @@ dynamic dns without the cost.
 
 Configuration is done via environment variables, the following MUST be set.
 
-`DIGITALOCEAN_API_KEY` - digitalocean API token
-`DIGITALOCEAN_DOMAIN` - domain being managed by digitalocean
-`DIGITALOCEAN_DNS_NAME` - name of the dns record (created in the ui) to update
+```DIGITALOCEAN_API_KEY``` - digitalocean API token
+
+```DIGITALOCEAN_DOMAIN``` - domain being managed by digitalocean
+
+```DIGITALOCEAN_DNS_NAME``` - name of the dns record (created in the ui) to update
 
 -----
 
