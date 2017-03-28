@@ -16,7 +16,8 @@ def getCurrentDnsRecord():
     resp.raise_for_status()
     return [
         record for record in resp.json()['domain_records']
-        if record['name'] == DNS_RECORD_NAME][0]
+        if record.get('name') == DNS_RECORD_NAME
+        and record.get('type') == 'A'][0]
 
 def updateDnsRecord(record_id, ip):
     url = UPDATE_RECORD_API_URL_FMT % (DOMAIN, record_id)
