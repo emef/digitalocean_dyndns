@@ -15,7 +15,7 @@ Configuration is done via environment variables, the following MUST be set.
 
 ```DIGITALOCEAN_DOMAIN``` - domain being managed by digitalocean
 
-```DIGITALOCEAN_DNS_NAME``` - name of the dns record (created in the ui) to update
+```DIGITALOCEAN_HOSTNAMES``` - comma-separated list of dns hostnames to update
 
 -----
 

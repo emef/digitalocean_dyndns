@@ -3,21 +3,18 @@ import requests
 
 API_KEY = os.environ['DIGITALOCEAN_API_KEY']
 DOMAIN = os.environ['DIGITALOCEAN_DOMAIN']
-DNS_RECORD_NAME = os.environ['DIGITALOCEAN_DNS_NAME']
+HOSTNAMES = os.environ['DIGITALOCEAN_HOSTNAMES']
 AUTH_HEADERS = {'Authorization': 'Bearer %s' % API_KEY}
 GET_RECORDS_API_URL = (
     'https://api.digitalocean.com/v2/domains/%s/records' % DOMAIN)
 UPDATE_RECORD_API_URL_FMT = (
     'https://api.digitalocean.com/v2/domains/%s/records/%s')
 
-def getCurrentDnsRecord():
-    resp = requests.get(
-        GET_RECORDS_API_URL, headers=AUTH_HEADERS)
-    resp.raise_for_status()
+def getCurrentDnsRecord(hostname, records):
     return [
-        record for record in resp.json()['domain_records']
-        if record.get('name') == DNS_RECORD_NAME
-        and record.get('type') == 'A'][0]
+        record for record in records['domain_records']
+        if record['name'] == hostname
+        and record['type'] == 'A'][0]
 
 def updateDnsRecord(record_id, ip):
     url = UPDATE_RECORD_API_URL_FMT % (DOMAIN, record_id)
@@ -28,9 +25,15 @@ def getCurrentIp():
     return requests.get('http://httpbin.org/ip').json()['origin']
 
 if __name__ == '__main__':
-    current_record = getCurrentDnsRecord()
     current_ip = getCurrentIp()
-    if current_ip != current_record['data']:
-        updateDnsRecord(current_record['id'], current_ip)
-        print 'Updated DNS record from %s to %s' % (
-            current_record['data'], current_ip)
+
+    resp = requests.get(GET_RECORDS_API_URL, headers=AUTH_HEADERS)
+    resp.raise_for_status()
+    current_records = resp['domain_records']
+
+    for hostname in HOSTNAMES.strip().split(','):
+        current_record = getCurrentDnsRecord(hostname, current_records)
+        if current_ip != current_record['data']:
+            updateDnsRecord(current_record['id'], current_ip)
+            print 'Updated DNS record from %s to %s' % (
+                current_record['data'], current_ip)
