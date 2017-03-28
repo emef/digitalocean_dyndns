@@ -12,7 +12,7 @@ UPDATE_RECORD_API_URL_FMT = (
 
 def getCurrentDnsRecord(hostname, records):
     return [
-        record for record in records['domain_records']
+        record for record in records
         if record['name'] == hostname
         and record['type'] == 'A'][0]
 
@@ -29,7 +29,7 @@ if __name__ == '__main__':
 
     resp = requests.get(GET_RECORDS_API_URL, headers=AUTH_HEADERS)
     resp.raise_for_status()
-    current_records = resp['domain_records']
+    current_records = resp.json()['domain_records']
 
     for hostname in HOSTNAMES.strip().split(','):
         current_record = getCurrentDnsRecord(hostname, current_records)
