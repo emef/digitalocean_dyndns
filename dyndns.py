@@ -35,5 +35,7 @@ if __name__ == '__main__':
         current_record = getCurrentDnsRecord(hostname, current_records)
         if current_ip != current_record['data']:
             updateDnsRecord(current_record['id'], current_ip)
-            print('Updated DNS record from %s to %s' % (
-                current_record['data'], current_ip))
+            print('Updated DNS record %s from %s to %s' % (
+                hostname, current_record['data'], current_ip))
+        else:
+            print(f'DNS record for {hostname} is already correct')
